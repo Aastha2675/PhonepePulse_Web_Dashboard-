@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+  <head>
+    <title>PhonePe Pulse</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header class="navbar">
+      <h2>PhonePe Pulse</h2>
+      <nav>
+        <span class="active">MAP</span>
+        <span>TOP PERFORMANCE</span>
+        <span>INSIGHTS</span>
+      </nav>
+    </header>
+
+    <!-- ================= MAP PAGE ================= -->
+    <div id="map-page" class="page active">
+      <div class="container">
+
+        <!-- LEFT PANEL -->
+        <div class="left-panel">
+          <div class="year-selector">
+            <button id="prevYear">◀</button>
+            <span id="yearText">----</span>
+            <button id="nextYear">▶</button>
+          </div>
+
+          <div class="quarter-list">
+            <button data-q="Q1">Q1</button>
+            <button data-q="Q2">Q2</button>
+            <button data-q="Q3">Q3</button>
+            <button data-q="Q4">Q4</button>
+          </div>
+
+          <div class="dropdown">
+            <button id="dropdownBtn">INSURANCE ▼</button>
+
+            <div id="dropdownMenu" class="dropdown-menu">
+              <div class="dropdown-item payments" data-value="transaction">
+                <div class="icon-circle">
+                  <img src="/assets/payment.svg" />
+                </div>
+                <span>TRANSACTION</span>
+              </div>
+
+              <div class="dropdown-item insurance" data-value="insurance">
+                <div class="icon-circle">
+                  <img src="/assets/insurance.svg" />
+                </div>
+                <span>INSURANCE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAP (ONLY LEAFLET MAP) -->
+        <div id="india-map"></div>
+
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+          <h1 id="title">Insurance</h1>
+          <p>
+            Discover the latest trends & data-driven insights from the indian
+            insurance market
+          </p>
+
+          <h2 class="section-heading" id="total-label">Total Policies</h2>
+          <h1 id="total">--</h1>
+
+          <div class="stats">
+            <div>
+              <h2 class="section-heading">Total Premium</h2>
+              <h3 id="premium">--</h3>
+            </div>
+            <div>
+              <h2 class="section-heading">Avg Premium</h2>
+              <h3 id="avg">--</h3>
+            </div>
+          </div>
+
+          <div id="txn-categories" class="txn-categories"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TOP PERFORMANCE PAGE ================= -->
+    <div id="top-performance-page" class="page">
+      <div class="top-performance-container">
+        <div class="tp-left">
+          <select id="tp-year"></select>
+          <select id="tp-state"></select>
+        </div>
+
+        <div class="tp-chart">
+          <canvas id="transactionBarChart"></canvas>
+        </div>
+
+        <div class="tp-right">
+          <h3>Top 10 States in year 2020</h3>
+          <ol id="top10-list"></ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./js/state.js"></script>
+    <script src="./js/map.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/render.js"></script>
+    <script src="./js/filter.js"></script>
+  </body>
+</html>
