@@ -15,7 +15,7 @@ An interactive full-stack web application designed to visualize and analyze Phon
 - **Frontend:** HTML5, CSS3, JavaScript, Leaflet.js (Maps), Chart.js (Graphs)
 - **Backend:** Flask (Python)
 - **Database:** MySQL
-- **Data Processing:** Python (Pandas, SQLAlchemy, JSON)
+- **Data Processing:** Python (Pandas, MySQL Connector, JSON)
 - **API:** RESTful Architecture
 
 ## 📋 Database Schema & ETL
