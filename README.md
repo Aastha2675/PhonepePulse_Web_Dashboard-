@@ -1,4 +1,4 @@
-# PeepIntoPe - PhonePe Pulse Web Dashboard 
+# 📊 PeepIntoPe - PhonePe Pulse Web Dashboard 
 
 An interactive full-stack web application designed to visualize and analyze PhonePe’s transaction and user data across India. This platform transforms raw JSON data into actionable business insights through an automated ETL pipeline and a dynamic geographical interface.
 
