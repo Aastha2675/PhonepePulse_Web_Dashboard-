@@ -1,125 +1,45 @@
-""" Handles HTTP requests & responses. """
 from flask import Blueprint, request, jsonify
-from backend.services import (
-    get_filter_data,
-    get_insurance_summary,
-    get_transaction_summary,
-    get_top_10_state_per_type,
-    get_top_10_state,
-    get_txn_per_type_in_state,
-    get_map_shading_data
-)
+from backend.services import *
 
-# modular routing
 api_routes = Blueprint("api_routes", __name__)
 
-# get year and quarter time filters data
-@api_routes.route("/api/filters", methods=["GET"])
+@api_routes.route("/api/filters")
 def get_filters():
-    data = get_filter_data()
-    return jsonify(data)
+    return jsonify(get_filter_data())
 
-
-@api_routes.route("/insurance/summary", methods=["GET"])
-def insurance_summary():
-
-    state = request.args.get("state")
-    if state == "All India":
-        state = "India"
-
-    year = request.args.get("year")
-    quarter = request.args.get("quarter")
-    
-    if quarter:
-        quarter = quarter.replace("Q", "")
-        quarter = int(quarter)
-    else:
-        quarter = None
-
-    if not year:
-        return jsonify({"error": "year is required"}), 400
-
-    # Call service layer
-    data = get_insurance_summary(
-        state=state,
-        year=int(year),
-        quarter=int(quarter) if quarter else None
-    )
-    
-    # Return response
-    return jsonify(data)
-
-@api_routes.route("/transaction/summary", methods=["GET"])
-def transaction_summary():
-    state = request.args.get("state")
-    year = int(request.args.get("year"))
-    quarter = int(request.args.get("quarter").replace("Q", ""))
-
-    data = get_transaction_summary(state, year, quarter)
-    return jsonify(data)
-
-@api_routes.route("/transaction/top", methods = ["GET"])
-def top_transactions():
-    year = request.args.get("year")
-    quarter = request.args.get("quarter") 
-
-    if quarter:
-        quarter = quarter.replace("Q", "")
-        quarter = int(quarter)
-    else:
-        quarter = None
-
-    if not year:
-        return jsonify({"error": "year is required"}), 400
-    
-    # call service layer
-    data = get_top_10_state_per_type(
-        year=int(year),
-        quarter=int(quarter) if quarter else None)
-    
-    # return response of api call
-    return jsonify(data)
-
-
-@api_routes.route("/api/top10/states", methods=["GET"])
+# Top 10 States Ranking
+@api_routes.route("/api/top10/states")
 def top_10_states():
     year = request.args.get("year", type=int)
-    if not year:
-        return jsonify({"has_data": False, "message": "Year is required"}), 400
-        
-    data = get_top_10_state(year)
-    return jsonify(data)
+    return jsonify(get_top_10_state(year))
 
-
-@api_routes.route("/api/transaction/category", methods=["GET"])
+# Chart Data Route
+@api_routes.route("/api/transaction/category")
 def txn_per_category():
     year = request.args.get("year", type=int)
     state = request.args.get("state")
+    return jsonify(get_txn_per_type_in_state(year, state))
 
-    if not year:
-        return jsonify({"has_data": False, "message": "Year is required"}), 400
-    
-    data = get_txn_per_type_in_state(year,state)
-    return jsonify(data)
-
-
-@api_routes.route("/api/map-shading", methods=["GET"])
+# Map Shading Route
+@api_routes.route("/api/map-shading")
 def map_shading_route():
-    data_type = request.args.get("type", "transaction")
-    year = request.args.get("year", type=int)
-    
-    # Get the raw string first (e.g., "Q3")
-    quarter_raw = request.args.get("quarter") 
-    
-    # Strip the "Q" and convert to integer (e.g., "Q3" -> 3)
-    try:
-        quarter = int(quarter_raw.replace("Q", ""))
-    except (ValueError, AttributeError):
-        return jsonify({"error": "Invalid quarter format. Use 'Q1' or '1'"}), 400
+    t = request.args.get("type", "transaction")
+    y = int(request.args.get("year"))
+    q_raw = request.args.get("quarter", "1")
+    q = int(q_raw.replace("Q", ""))
+    return jsonify(get_map_shading_data(t, y, q))
 
-    if not year or not quarter:
-        return jsonify({"error": "Missing parameters"}), 400
+# Summary Routes
+@api_routes.route("/insurance/summary")
+def insurance_summary():
+    s = request.args.get("state")
+    y = int(request.args.get("year"))
+    q = int(request.args.get("quarter").replace("Q", ""))
+    return jsonify(get_insurance_summary(s, y, q))
 
-    # Now call the service function
-    data = get_map_shading_data(data_type, year, quarter)
-    return jsonify(data)
+@api_routes.route("/transaction/summary")
+def transaction_summary():
+    s = request.args.get("state")
+    y = int(request.args.get("year"))
+    q = int(request.args.get("quarter").replace("Q", ""))
+    return jsonify(get_transaction_summary(s, y, q))
